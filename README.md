@@ -1,16 +1,16 @@
-# letsencrypt.sh-email-notify-hook
+# dehydrated-email-notify-hook
 
-This is a semi-automated hook for [letsencrypt.sh](https://github.com/lukas2511/letsencrypt.sh) that notifies you by email when a new DNS record needs to be created. This is useful when your DNS provider has no API and does not support dynamic DNS updates, so record creation needs to be done manually. With this hook, you will be notified when a new challenge is ready to be deployed.
+This is a semi-automated hook for [dehydrated](https://github.com/lukas2511/dehydrated) that notifies you by email when a new DNS record needs to be created. This is useful when your DNS provider has no API and does not support dynamic DNS updates, so record creation needs to be done manually. With this hook, you will be notified when a new challenge is ready to be deployed.
 
-When using this hook, letsencrypt.sh will generate a new certificate and wait for you to manually update the challenge record with your DNS provider of choice. If desired, you can schedule letsencrypt.sh using cron, and still be notified when your certificate is about to expire.
+When using this hook, dehydrated will generate a new certificate and wait for you to manually update the challenge record with your DNS provider of choice. If desired, you can schedule dehydrated using cron, and still be notified when your certificate is about to expire.
 
-This should only be used if your DNS provider does not support automation. For a fully automated solution, consider one of the other options [here](https://github.com/lukas2511/letsencrypt.sh/wiki/Examples-for-DNS-01-hooks).
+This should only be used if your DNS provider does not support automation. For a fully automated solution, consider one of the other options [here](https://github.com/lukas2511/dehydrated/wiki/Examples-for-DNS-01-hooks).
 
 ## Setup
 
 ```
-git clone https://github.com/lukas2511/letsencrypt.sh
-cd letsencrypt.sh
+git clone https://github.com/lukas2511/dehydrated
+cd dehydrated
 git clone https://github.com/bennettp123/letsencrypt.sh-email-notify-hook hooks/email-notify
 ```
 
@@ -19,7 +19,7 @@ git clone https://github.com/bennettp123/letsencrypt.sh-email-notify-hook hooks/
 If RECIPIENT is set, the email will be sent to the email address specified. Otherwise, it will be sent to the current user.
 
 ```
-./letsencrypt.sh --cron --domain example.com --challenge dns-01 --hook 'hooks/email-notify/hook.sh'
+./dehydrated --cron --domain example.com --challenge dns-01 --hook 'hooks/email-notify/hook.sh'
 #
 # !! WARNING !! No main config file found, using default config!
 #
@@ -36,7 +36,7 @@ Processing example.com
 
 Check your email and create the TXT record specified. Use the smallest TTL possible.
 
-letsencrypt.sh will wait indefinitely for you to create the TXT record, and for it propagate (this may take a while):
+dehydrated will wait indefinitely for you to create the TXT record, and for it propagate (this may take a while):
 
 ```
  + DNS not propagated. Waiting 30s for record creation and replication...
@@ -64,7 +64,7 @@ To use this, set OCSP_RESPONSE_FILE to the file to store the OCSP response. Opti
 ```
 export OCSP_RESPONSE_FILE=/path/to/ocsp.resp
 export http_proxy=http://127.0.0.1:3128
-./letsencrypt.sh --cron --domain example.com --challenge dns-01 --hook 'hooks/email-notify/hook.sh'
+./dehydrated --cron --domain example.com --challenge dns-01 --hook 'hooks/email-notify/hook.sh'
 ```
 
 To enable this in nginx, add the following line to nginx config:
@@ -73,3 +73,4 @@ ssl_stapling_file /home/letsencrypt/ocsp/ocsp.resp;
 ```
 
 You should also update the OCSP file regularly (eg daily using cron) to ensure it is valid and up to date.
+
