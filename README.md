@@ -21,7 +21,7 @@ a fully automated solution, consider one of the other options
 ```
 git clone https://github.com/lukas2511/dehydrated
 cd dehydrated
-git clone https://github.com/bennettp123/letsencrypt.sh-email-notify-hook hooks/email-notify
+git clone https://github.com/bennettp123/dehydrated-email-notify-hook hooks/email-notify
 ```
 
 ## Usage
