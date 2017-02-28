@@ -5,11 +5,13 @@ function has_propagated {
         local RECORD_NAME="${1}"; shift
         local TOKEN_VALUE="${1}"; shift
         local RECORD_DOMAIN=$(echo "${RECORD_NAME}" | cut -d'.' -f 2-)
-        local AUTH_NS=($(dig +short "${RECORD_DOMAIN}" IN NS))
-        while [ -z "$AUTH_NS" ]; do
-            RECORD_DOMAIN=$(echo "${RECORD_DOMAIN}" | cut -d'.' -f 2-)
-            AUTH_NS=($(dig +short "${RECORD_DOMAIN}" IN NS))
-        done
+        if [ ${#AUTH_NS[@]} -eq 0 ]; then
+            local AUTH_NS=($(dig +short "${RECORD_DOMAIN}" IN NS))
+            while [ -z "$AUTH_NS" ]; do
+                RECORD_DOMAIN=$(echo "${RECORD_DOMAIN}" | cut -d'.' -f 2-)
+                AUTH_NS=($(dig +short "${RECORD_DOMAIN}" IN NS))
+            done
+        fi
         for NS in "${AUTH_NS[@]}"; do
             dig +short @"${NS}" "${RECORD_NAME}" IN TXT | grep -q "\"${TOKEN_VALUE}\"" || return 1
         done
