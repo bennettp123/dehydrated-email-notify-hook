@@ -12,7 +12,7 @@ function has_propagated {
                 iAUTH_NS=($(dig +short "${RECORD_DOMAIN}" IN NS))
             done
         else
-           iAUTH_NS=("${AUTH_NS[@]}")
+           local iAUTH_NS=("${AUTH_NS[@]}")
         fi
         for NS in "${iAUTH_NS[@]}"; do
             dig +short @"${NS}" "${RECORD_NAME}" IN TXT | grep -q "\"${TOKEN_VALUE}\"" || return 1
