@@ -4,11 +4,16 @@ function has_propagated {
     while [ "$#" -ge 2 ]; do
         local RECORD_NAME="${1}"; shift
         local TOKEN_VALUE="${1}"; shift
-        local RECORD_DOMAIN=$(echo "${RECORD_NAME}" | cut -d'.' -f 2-)
         if [ ${#AUTH_NS[@]} -eq 0 ]; then
-            local iAUTH_NS=($(dig +short "${RECORD_DOMAIN}" IN NS))
+            local RECORD_DOMAIN=$RECORD_NAME
+            declare -a iAUTH_NS
             while [ -z "$iAUTH_NS" ]; do
                 RECORD_DOMAIN=$(echo "${RECORD_DOMAIN}" | cut -d'.' -f 2-)
+                iAUTH_NS=($(dig +short "${RECORD_DOMAIN}" IN CNAME))
+                if [ -n "$iAUTH_NS" ]; then
+                    unset iAUTH_NS && declare -a iAUTH_NS
+                    continue
+                fi
                 iAUTH_NS=($(dig +short "${RECORD_DOMAIN}" IN NS))
             done
         else
