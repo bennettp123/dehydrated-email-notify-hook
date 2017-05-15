@@ -22,6 +22,7 @@ function has_propagated {
         for NS in "${iAUTH_NS[@]}"; do
             dig +short @"${NS}" "${RECORD_NAME}" IN TXT | grep -q "\"${TOKEN_VALUE}\"" || return 1
         done
+        unset iAUTH_NS
     done
     return 0
 }
